@@ -1,24 +1,24 @@
-const connection = require("../db/connection")
-
+const connection = require("../db/connection");
 
 exports.fetchArticleById = (article_id) => {
+    console.log(article_id)
+  return connection
+    .query("SELECT * FROM articles WHERE article_id = $1", [article_id])
+    .then((result) => {
 
-return connection.query("SELECT * FROM articles WHERE article_id = $1", [article_id]).then((result) => {
-return result.rows[0]
-})
-.catch((err)=>{
-    return err
-})
+//  if (result.rowCount === 0) {
+//     return Promise.reject({
+//       status: 404,
+//       msg: "Invalid article - ID",
+//     });
+//   }
 
-}
 
- 
-//  //PARAMETRIC GET 
-//   exports.selectParkById = (park_id) => {
-//     return db
-//       .query("SELECT * FROM parks WHERE park_id=$1", [park_id])
-//       .then((results) => {
-//         return results.rows[0];
-//       })
-//       .catch((err) => console.log(err));
-//   };
+      return result.rows[0];
+    })
+    .catch((err) => {
+      return err;
+    });
+};
+
+

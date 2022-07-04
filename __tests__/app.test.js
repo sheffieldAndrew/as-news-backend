@@ -50,7 +50,7 @@ describe("3- GET /api/topics", () => {
   });
 });
 
-describe("04 GET /api/articles/1", () => {
+describe("04 GET /api/articles/:article_id", () => {
   test("200 - returns article object with correct properties", () => {
     return request(app)
       .get("/api/articles/1")
@@ -70,22 +70,42 @@ describe("04 GET /api/articles/1", () => {
         );
       });
   });
+  test("200 - different id number - returns article object with correct properties", () => {
+    return request(app)
+      .get("/api/articles/10")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.article).toBeInstanceOf(Object);
+        expect(body.article).toEqual(
+          expect.objectContaining({
+            author: expect.any(String),
+            title: expect.any(String),
+            article_id: expect.any(Number),
+            body: expect.any(String),
+            topic: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+          })
+        );
+      });
+  });
+
+  // test("400 - bad request invalid ID string - returns error message with 400 -Invalid article - ID", () => {
+  //   return request(app)
+  //     .get("/api/article/invalid_id")
+  //     .expect(400)
+  //     .then(({ body: { msg } }) => {
+  //      expect(msg).toBe("Invalid article - ID");
+  //     });
+  // });
+
+  // test("404 - bad request invalid ID no id number - returns error message with id error message", () => {
+  //   return request(app)
+  //     .get("/api/article/9999")
+  //     .expect(404)
+  //     .then(({ body: { msg } }) => {
+  //        expect(msg).toBe("Error - No such path");
+  //     });
+  // })
 });
 
-// // GET WITH PARAMETRIC
-//   describe.only('2. GET /api/parks/:park_id', () => {
-//     test('status:200, responds with a single matching park', () => {
-//       const PARK_ID = 2;
-//       return request(app)
-//         .get(`/api/parks/${PARK_ID}`)
-//         .expect(200)
-//         .then(({ body }) => {
-//           expect(body.park).toEqual({
-//             park_id: PARK_ID,
-//             park_name: 'Alton Towers',
-//             year_opened: 1980,
-//             annual_attendance: 2520000,
-//           });
-//         });
-//     });
-//   });

@@ -11,11 +11,11 @@ app.get("/api/topics", getTopics);
 app.get("/api/articles/:article_id", getArticleById)
 // err paths
 
+// 
+
 app.use("*", (req, res) => {
   res.status(404).send({ msg: "Error - No such path" });
 });
-
-
 
 app.use((err, req, res, next) => {
   console.log(err);
@@ -23,3 +23,5 @@ app.use((err, req, res, next) => {
 });
 
 module.exports = app;
+
+
