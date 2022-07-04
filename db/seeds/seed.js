@@ -26,7 +26,7 @@ const seed = async ({ topicData, userData, articleData, commentData }) => {
       name,
       avatar_url,
     ])
-  );
+  )
   const usersPromise = db
     .query(insertUsersQueryStr)
     .then((result) => result.rows);
