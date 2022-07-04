@@ -1,14 +1,14 @@
 const express = require("express");
 const app = express();
 app.use(express.json());
-// const {/*article CONTROLLER FUNCTIONS*/} = require('./controllers/articles-controllers')
-
-const { getTopics } = require("./controllers/topics_controllers");
+const {getArticleById} = require('./controllers/articles_controllers')
+const { getTopics} = require("./controllers/topics_controllers");
 
 //happy paths
 
 app.get("/api/topics", getTopics);
 
+app.get("/api/articles/:article_id", getArticleById)
 // err paths
 
 app.use("*", (req, res) => {

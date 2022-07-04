@@ -49,3 +49,43 @@ describe("3- GET /api/topics", () => {
       });
   });
 });
+
+describe("04 GET /api/articles/1", () => {
+  test("200 - returns article object with correct properties", () => {
+    return request(app)
+      .get("/api/articles/1")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.article).toBeInstanceOf(Object);
+        expect(body.article).toEqual(
+          expect.objectContaining({
+            author: expect.any(String),
+            title: expect.any(String),
+            article_id: expect.any(Number),
+            body: expect.any(String),
+            topic: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+          })
+        );
+      });
+  });
+});
+
+// // GET WITH PARAMETRIC
+//   describe.only('2. GET /api/parks/:park_id', () => {
+//     test('status:200, responds with a single matching park', () => {
+//       const PARK_ID = 2;
+//       return request(app)
+//         .get(`/api/parks/${PARK_ID}`)
+//         .expect(200)
+//         .then(({ body }) => {
+//           expect(body.park).toEqual({
+//             park_id: PARK_ID,
+//             park_name: 'Alton Towers',
+//             year_opened: 1980,
+//             annual_attendance: 2520000,
+//           });
+//         });
+//     });
+//   });
