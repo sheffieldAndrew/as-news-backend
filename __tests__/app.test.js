@@ -40,12 +40,91 @@ describe("3- GET /api/topics", () => {
       });
   });
 
-  test("404 - bad request response for an invalid path - returns error message", () => {
+  test("404 - handles bad path", () => {
     return request(app)
-      .get("/api/topicz")
+      .get("/api/invalid_path")
       .expect(404)
       .then(({ body: { msg } }) => {
-        expect(msg).toBe("Error - No such path");
+        expect(msg).toBe("bad path");
+      });
+  });
+});
+
+describe("04 GET /api/articles/:article_id", () => {
+  test("200 - returns article object with correct properties", () => {
+    return request(app)
+      .get("/api/articles/1")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.article).toBeInstanceOf(Object);
+        expect(body.article).toEqual(
+          expect.objectContaining({
+            author: expect.any(String),
+            title: expect.any(String),
+            article_id: expect.any(Number),
+            body: expect.any(String),
+            topic: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+          })
+        );
+      });
+  });
+  test("200 - different id number - returns article object with correct properties", () => {
+    return request(app)
+      .get("/api/articles/10")
+      .expect(200)
+      .then(({ body: { article } }) => {
+        expect(article).toBeInstanceOf(Object);
+        expect(article).toEqual(
+          expect.objectContaining({
+            author: expect.any(String),
+            title: expect.any(String),
+            article_id: expect.any(Number),
+            body: expect.any(String),
+            topic: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+          })
+        );
+      });
+  });
+
+  test("200 - different id number - specific article returned", () => {
+    return request(app)
+      .get("/api/articles/9")
+      .expect(200)
+      .then(({ body: { article } }) => {
+        expect(article).toBeInstanceOf(Object);
+        expect(article).toEqual(
+          expect.objectContaining({
+            article_id: 9,
+            title: "They're not exactly dogs, are they?",
+            topic: "mitch",
+            author: "butter_bridge",
+            body: "Well? Think about it.",
+            created_at: "2020-06-06T09:10:00.000Z",
+            votes: 0,
+          })
+        );
+      });
+  });
+
+  test("404 - handles bad path", () => {
+    return request(app)
+      .get("/api/articles/99999")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("article 99999 - does not exist");
+      });
+  });
+
+  test("400 - handles bad path", () => {
+    return request(app)
+      .get("/api/articles/invalid_path")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Invalid - article must be a number");
       });
   });
 });

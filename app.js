@@ -1,25 +1,28 @@
 const express = require("express");
 const app = express();
 app.use(express.json());
-// const {/*article CONTROLLER FUNCTIONS*/} = require('./controllers/articles-controllers')
-
+const { getArticleById } = require("./controllers/articles_controllers");
 const { getTopics } = require("./controllers/topics_controllers");
+const {
+  handlesInvalidPaths404,
+  handlesCustomError,
+  handlesPsqlErrors,
+  handles500s,
+} = require("./controllers/err.controllers");
 
 //happy paths
 
 app.get("/api/topics", getTopics);
 
+app.get("/api/articles/:article_id", getArticleById);
+
 // err paths
+app.use("*", handlesInvalidPaths404);
 
-app.use("*", (req, res) => {
-  res.status(404).send({ msg: "Error - No such path" });
-});
+app.use(handlesCustomError);
 
+app.use(handlesPsqlErrors);
 
-
-app.use((err, req, res, next) => {
-  console.log(err);
-  res.status(500).send({ msg: "Server error - something is wrong" });
-});
+app.use(handles500s);
 
 module.exports = app;
