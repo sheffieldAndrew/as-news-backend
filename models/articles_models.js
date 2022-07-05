@@ -13,3 +13,12 @@ exports.fetchArticleById = (article_id) => {
       return result.rows[0];
     });
 };
+
+exports.patchArticleById = (incl_votes, article_id) => {
+return connection.query(`UPDATE articles SET votes=votes+$1 WHERE article_id=$2 RETURNING * ;`,
+[incl_votes, article_id])
+.then((updatedArticleInfo)=>{
+return updatedArticleInfo.rows[0]
+})
+}
+
