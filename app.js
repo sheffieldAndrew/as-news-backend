@@ -3,7 +3,12 @@ const app = express();
 app.use(express.json());
 const { getArticleById } = require("./controllers/articles_controllers");
 const { getTopics } = require("./controllers/topics_controllers");
-const {handlesInvalidPaths404, handlesCustomError, handlesPsqlErrors, handles500s}=require("./controllers/err.controllers")
+const {
+  handlesInvalidPaths404,
+  handlesCustomError,
+  handlesPsqlErrors,
+  handles500s,
+} = require("./controllers/err.controllers");
 
 //happy paths
 

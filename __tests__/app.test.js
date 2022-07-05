@@ -95,7 +95,7 @@ describe("04 GET /api/articles/:article_id", () => {
       .get("/api/articles/99999")
       .expect(404)
       .then(({ body: { msg } }) => {
-        expect(msg).toBe('article 99999 - does not exist');
+        expect(msg).toBe("article 99999 - does not exist");
       });
   });
 
@@ -107,5 +107,4 @@ describe("04 GET /api/articles/:article_id", () => {
         expect(msg).toBe("Invalid - article must be a number");
       });
   });
-
 });
