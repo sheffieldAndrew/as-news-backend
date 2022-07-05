@@ -90,6 +90,26 @@ describe("04 GET /api/articles/:article_id", () => {
       });
   });
 
+  test("200 - different id number - specific article returned", () => {
+    return request(app)
+      .get("/api/articles/9")
+      .expect(200)
+      .then(({ body: { article } }) => {
+        expect(article).toBeInstanceOf(Object);
+        expect(article).toEqual(
+          expect.objectContaining({
+            article_id: 9,
+            title: "They're not exactly dogs, are they?",
+            topic: "mitch",
+            author: "butter_bridge",
+            body: "Well? Think about it.",
+            created_at: "2020-06-06T09:10:00.000Z",
+            votes: 0,
+          })
+        );
+      });
+  });
+
   test("404 - handles bad path", () => {
     return request(app)
       .get("/api/articles/99999")
