@@ -15,7 +15,6 @@ exports.fetchArticleById = (article_id) => {
 };
 
 exports.patchArticleById = (incl_votes, article_id) => {
-  console.log(incl_votes);
   if (typeof incl_votes !== "number" || !incl_votes)
     return Promise.reject({
       status: 400,
