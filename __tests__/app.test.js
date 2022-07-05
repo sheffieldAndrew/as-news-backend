@@ -160,5 +160,20 @@ describe('05 - PATCH /api/articles/:article_id', () => {
     })
  })
 });
+
+test('202 - decrease votes - updates article and returns updated article', () => {
+  const articleUpdate = { incl_votes: -50 }
+   return request(app).patch("/api/articles/10").send(articleUpdate).expect(202).then((article)=>{
+   expect(article.body).toEqual({
+    article_id: 10,
+    title: 'Seven inspirational thought leaders from Manchester UK',
+    topic: 'mitch',
+    author: 'rogersop',
+    body: "Who are we kidding, there is only one, and it's Mitch!",
+    created_at: '2020-05-14T04:15:00.000Z',
+    votes: -50
+  })
+})
+});
 });
 
