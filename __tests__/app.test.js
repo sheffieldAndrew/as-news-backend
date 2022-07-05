@@ -213,7 +213,21 @@ describe("05 - PATCH /api/articles/:article_id", () => {
       .send({ incl_votes: "hello" })
       .expect(400)
       .then(({ body: { msg } }) => {
-        expect(msg).toBe("Invalid - incl_votes must be a number");
+        expect(msg).toBe(
+          "Invalid - input must be in form {incl_votes: number}"
+        );
+      });
+  });
+
+  test("400 - handles bad path - no such key", () => {
+    return request(app)
+      .patch("/api/articles/2")
+      .send({ inc_notes: 2 })
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe(
+          "Invalid - input must be in form {incl_votes: number}"
+        );
       });
   });
 });

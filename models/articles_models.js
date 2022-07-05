@@ -15,10 +15,11 @@ exports.fetchArticleById = (article_id) => {
 };
 
 exports.patchArticleById = (incl_votes, article_id) => {
-  if (typeof incl_votes !== "number")
+  console.log(incl_votes);
+  if (typeof incl_votes !== "number" || !incl_votes)
     return Promise.reject({
       status: 400,
-      msg: `Invalid - incl_votes must be a number`,
+      msg: "Invalid - input must be in form {incl_votes: number}",
     });
 
   return connection
