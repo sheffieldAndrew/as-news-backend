@@ -40,12 +40,12 @@ describe("3- GET /api/topics", () => {
       });
   });
 
-  test("404 - bad request response for an invalid path - returns error message", () => {
+  test("404 - handles bad path", () => {
     return request(app)
-      .get("/api/topicz")
+      .get("/api/invalid_path")
       .expect(404)
       .then(({ body: { msg } }) => {
-        expect(msg).toBe("Error - No such path");
+        expect(msg).toBe("bad path");
       });
   });
 });
@@ -74,9 +74,9 @@ describe("04 GET /api/articles/:article_id", () => {
     return request(app)
       .get("/api/articles/10")
       .expect(200)
-      .then(({ body }) => {
-        expect(body.article).toBeInstanceOf(Object);
-        expect(body.article).toEqual(
+      .then(({ body: { article } }) => {
+        expect(article).toBeInstanceOf(Object);
+        expect(article).toEqual(
           expect.objectContaining({
             author: expect.any(String),
             title: expect.any(String),
@@ -90,22 +90,22 @@ describe("04 GET /api/articles/:article_id", () => {
       });
   });
 
-  // test("400 - bad request invalid ID string - returns error message with 400 -Invalid article - ID", () => {
-  //   return request(app)
-  //     .get("/api/article/invalid_id")
-  //     .expect(400)
-  //     .then(({ body: { msg } }) => {
-  //      expect(msg).toBe("Invalid article - ID");
-  //     });
-  // });
+  test("404 - handles bad path", () => {
+    return request(app)
+      .get("/api/articles/99999")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe('article 99999 - does not exist');
+      });
+  });
 
-  // test("404 - bad request invalid ID no id number - returns error message with id error message", () => {
-  //   return request(app)
-  //     .get("/api/article/9999")
-  //     .expect(404)
-  //     .then(({ body: { msg } }) => {
-  //        expect(msg).toBe("Error - No such path");
-  //     });
-  // })
+  test("400 - handles bad path", () => {
+    return request(app)
+      .get("/api/articles/invalid_path")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Invalid - article must be a number");
+      });
+  });
+
 });
-
