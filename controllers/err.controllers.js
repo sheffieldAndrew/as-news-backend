@@ -19,5 +19,5 @@ exports.handlesPsqlErrors = (err, req, res, next) => {
 };
 
 exports.handles500s = (err, req, res, next) => {
-res.status(500).send({ msg: "Server error - something is wrong" });
+  res.status(500).send({ msg: "Server error - something is wrong" });
 };

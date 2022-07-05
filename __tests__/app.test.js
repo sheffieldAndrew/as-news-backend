@@ -129,51 +129,91 @@ describe("04 GET /api/articles/:article_id", () => {
   });
 });
 
-
-describe('05 - PATCH /api/articles/:article_id', () => {
-  test('202 - updates article and returns updated article', () => {
-       const articleUpdate = { incl_votes: 10 }
-        return request(app).patch("/api/articles/1").send(articleUpdate).expect(202).then((article)=>{
+describe("05 - PATCH /api/articles/:article_id", () => {
+  test("200 - updates article and returns updated article", () => {
+    const articleUpdate = { incl_votes: 10 };
+    return request(app)
+      .patch("/api/articles/1")
+      .send(articleUpdate)
+      .expect(200)
+      .then((article) => {
         expect(article.body).toEqual({
           article_id: 1,
-          title: 'Living in the shadow of a great man',
-          topic: 'mitch',
-          author: 'butter_bridge',
-          body: 'I find this existence challenging',
-          created_at: '2020-07-09T20:11:00.000Z',
-          votes: 110
-        })
-    })
+          title: "Living in the shadow of a great man",
+          topic: "mitch",
+          author: "butter_bridge",
+          body: "I find this existence challenging",
+          created_at: "2020-07-09T20:11:00.000Z",
+          votes: 110,
+        });
+      });
   });
 
-  test('202 - different article updates article and returns updated article', () => {
-    const articleUpdate = { incl_votes: 50 }
-     return request(app).patch("/api/articles/10").send(articleUpdate).expect(202).then((article)=>{
-     expect(article.body).toEqual({
-      article_id: 10,
-      title: 'Seven inspirational thought leaders from Manchester UK',
-      topic: 'mitch',
-      author: 'rogersop',
-      body: "Who are we kidding, there is only one, and it's Mitch!",
-      created_at: '2020-05-14T04:15:00.000Z',
-      votes: 50
-    })
- })
-});
+  test("200 - different article updates article and returns updated article", () => {
+    const articleUpdate = { incl_votes: 50 };
+    return request(app)
+      .patch("/api/articles/10")
+      .send(articleUpdate)
+      .expect(200)
+      .then((article) => {
+        expect(article.body).toEqual({
+          article_id: 10,
+          title: "Seven inspirational thought leaders from Manchester UK",
+          topic: "mitch",
+          author: "rogersop",
+          body: "Who are we kidding, there is only one, and it's Mitch!",
+          created_at: "2020-05-14T04:15:00.000Z",
+          votes: 50,
+        });
+      });
+  });
 
-test('202 - decrease votes - updates article and returns updated article', () => {
-  const articleUpdate = { incl_votes: -50 }
-   return request(app).patch("/api/articles/10").send(articleUpdate).expect(202).then((article)=>{
-   expect(article.body).toEqual({
-    article_id: 10,
-    title: 'Seven inspirational thought leaders from Manchester UK',
-    topic: 'mitch',
-    author: 'rogersop',
-    body: "Who are we kidding, there is only one, and it's Mitch!",
-    created_at: '2020-05-14T04:15:00.000Z',
-    votes: -50
-  })
-})
-});
-});
+  test("200 - decrease votes - updates article and returns updated article", () => {
+    const articleUpdate = { incl_votes: -50 };
+    return request(app)
+      .patch("/api/articles/10")
+      .send(articleUpdate)
+      .expect(200)
+      .then((article) => {
+        expect(article.body).toEqual({
+          article_id: 10,
+          title: "Seven inspirational thought leaders from Manchester UK",
+          topic: "mitch",
+          author: "rogersop",
+          body: "Who are we kidding, there is only one, and it's Mitch!",
+          created_at: "2020-05-14T04:15:00.000Z",
+          votes: -50,
+        });
+      });
+  });
 
+  test("404 - handles bad path - no such article id", () => {
+    return request(app)
+      .patch("/api/articles/99999")
+      .send({ incl_votes: 50 })
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("article 99999 - does not exist");
+      });
+  });
+
+  test("400 - handles bad path - string for article_id", () => {
+    return request(app)
+      .patch("/api/articles/invalid_path")
+      .send({ incl_votes: 50 })
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Invalid - article must be a number");
+      });
+  });
+
+  test("400 - handles bad path - votes passed as string", () => {
+    return request(app)
+      .patch("/api/articles/2")
+      .send({ incl_votes: "hello" })
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Invalid - incl_votes must be a number");
+      });
+  });
+});

@@ -1,6 +1,9 @@
 const express = require("express");
 const app = express();
-const { getArticleById, updateArticleById } = require("./controllers/articles_controllers");
+const {
+  getArticleById,
+  updateArticleById,
+} = require("./controllers/articles_controllers");
 const { getTopics } = require("./controllers/topics_controllers");
 const {
   handlesInvalidPaths404,
