@@ -66,13 +66,14 @@ describe("04 GET /api/articles/:article_id", () => {
             topic: expect.any(String),
             created_at: expect.any(String),
             votes: expect.any(Number),
+            comment_count:expect.any(String)
           })
         );
       });
   });
   test("200 - different id number - returns article object with correct properties", () => {
     return request(app)
-      .get("/api/articles/10")
+      .get("/api/articles/9")
       .expect(200)
       .then(({ body: { article } }) => {
         expect(article).toBeInstanceOf(Object);
@@ -85,6 +86,7 @@ describe("04 GET /api/articles/:article_id", () => {
             topic: expect.any(String),
             created_at: expect.any(String),
             votes: expect.any(Number),
+            comment_count:expect.any(String)
           })
         );
       });
@@ -105,6 +107,7 @@ describe("04 GET /api/articles/:article_id", () => {
             body: "Well? Think about it.",
             created_at: "2020-06-06T09:10:00.000Z",
             votes: 0,
+            comment_count: "2"
           })
         );
       });
@@ -151,7 +154,7 @@ describe("05 - PATCH /api/articles/:article_id", () => {
   });
 })
 
-describe("6- GET /api/users", () => {
+describe("6/7- GET /api/users", () => {
   test("200, responds with an array of users objects with useranme, name and avatar_url props", () => {
     return request(app)
       .get("/api/users")
