@@ -46,15 +46,14 @@ exports.patchArticleById = (incl_votes, article_id) => {
 
 exports.fetchArticles = () => {
   return connection
-    .query(`  SELECT articles.*, COUNT(comments.article_id) AS comment_count 
+    .query(`SELECT articles.*, COUNT(comments.article_id)::INT AS comment_count 
     FROM articles 
-    JOIN comments 
+    LEFT JOIN comments 
     ON comments.article_id = articles.article_id
     GROUP BY articles.article_id
     ORDER BY created_at DESC`)
     .then((articles) => {
-      console.log(articles.rows)
-      return articles.rows;
+          return articles.rows;
     })
     .catch((err) => {
       return err;
