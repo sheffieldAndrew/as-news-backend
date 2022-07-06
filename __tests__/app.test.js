@@ -342,7 +342,7 @@ describe("9. GET /api/articles/:article_id/comments ", () => {
       });
   });
 
-  test("404 - handles bad path", () => {
+  test("404 - handles bad path - no comments or no article", () => {
     return request(app)
       .get("/api/articles/99999/comments")
       .expect(404)
@@ -356,7 +356,7 @@ describe("9. GET /api/articles/:article_id/comments ", () => {
       .get("/api/articles/invalid_path/comments")
       .expect(400)
       .then(({ body: { msg } }) => {
-        expect(msg).toBe("Invalid - article must be a number");
+        expect(msg).toBe("article id must be a number");
       });
   });
 });

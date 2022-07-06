@@ -1,6 +1,12 @@
 const connection = require("../db/connection");
 
 exports.fetchCommentsByArticleId = (article_id) => {
+  if (isNaN(+article_id)) {
+    return Promise.reject({
+      status: 400,
+      msg: `article id must be a number`,
+    });
+  }
   return connection
     .query(
       `SELECT * 
