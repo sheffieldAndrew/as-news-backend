@@ -146,6 +146,10 @@ describe("05 - PATCH /api/articles/:article_id", () => {
           body: "I find this existence challenging",
           created_at: "2020-07-09T20:11:00.000Z",
           votes: 110,
+        });
+      });
+  });
+})
 
 describe("6- GET /api/users", () => {
   test("200, responds with an array of users objects with useranme, name and avatar_url props", () => {
@@ -181,6 +185,7 @@ describe("6- GET /api/users", () => {
               "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
           },
         ]);
+
         expect(users.length).toBe(4);
         users.forEach((user) => {
           expect(user).toEqual(
@@ -263,17 +268,11 @@ describe("6- GET /api/users", () => {
           "Invalid - input must be in form {incl_votes: number}"
         );
       });
+
+      
   });
 
-  test("400 - handles bad path - no such key", () => {
-    return request(app)
-      .patch("/api/articles/2")
-      .send({ inc_notes: 2 })
-      .expect(400)
-      .then(({ body: { msg } }) => {
-        expect(msg).toBe(
-          "Invalid - input must be in form {incl_votes: number}"
-        );
+
 
   test("404 - handles bad path", () => {
     return request(app)
@@ -283,4 +282,18 @@ describe("6- GET /api/users", () => {
         expect(msg).toBe("bad path");
       });
   });
+
+
 });
+
+test("400 - handles bad path - no such key", () => {
+  return request(app)
+    .patch("/api/articles/2")
+    .send({ inc_notes: 2 })
+    .expect(400)
+    .then(({ body: { msg } }) => {
+      expect(msg).toBe(
+        "Invalid - input must be in form {incl_votes: number}"
+      );
+    })
+  })
