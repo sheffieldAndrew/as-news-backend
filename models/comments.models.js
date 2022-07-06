@@ -1,26 +1,33 @@
 const connection = require("../db/connection");
 
-exports.fetchCommentsByArticleId = (article_id) => {
+exports.fetchCommentsByArticleId = async (article_id) => {
   if (isNaN(+article_id)) {
     return Promise.reject({
       status: 400,
       msg: `article id must be a number`,
     });
   }
-  return connection
-    .query(
-      `SELECT * 
-      FROM comments
-      WHERE article_id = $1`,
-      [article_id]
-    )
-    .then((result) => {
-      if (result.rowCount === 0) {
-        return Promise.reject({
-          status: 404,
-          msg: `article ${article_id} - has no comments`,
-        });
-      }
-      return result.rows;
+
+  const articleValidate = await connection.query(
+    `
+SELECT * FROM articles
+WHERE article_id = $1
+`,
+    [article_id]
+  );
+
+  if (articleValidate.rowCount === 0) {
+    return Promise.reject({
+      status: 404,
+      msg: `article ${article_id} - does not exist`,
     });
+  }
+
+  const commentsForArticle = await connection.query(
+    `SELECT * FROM comments
+WHERE article_id = $1`,
+    [article_id]
+  );
+
+  return commentsForArticle.rows;
 };

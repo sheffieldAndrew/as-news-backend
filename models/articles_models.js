@@ -2,7 +2,7 @@ const connection = require("../db/connection");
 
 exports.fetchArticleById = (article_id) => {
   return connection
-    .query(`SELECT articles.*, COUNT(comments.article_id) AS comment_count 
+    .query(`SELECT articles.*, COUNT(comments.article_id)::INT AS comment_count 
     FROM articles 
     JOIN comments 
     ON comments.article_id = articles.article_id
@@ -19,17 +19,17 @@ exports.fetchArticleById = (article_id) => {
     });
 };
 
-exports.patchArticleById = (incl_votes, article_id) => {
-  if (typeof incl_votes !== "number" || !incl_votes)
+exports.patchArticleById = (inc_votes, article_id) => {
+  if (typeof inc_votes !== "number" || !inc_votes)
     return Promise.reject({
       status: 400,
-      msg: "Invalid - input must be in form {incl_votes: number}",
+      msg: "Invalid - input must be in form {inc_votes: number}",
     });
 
   return connection
     .query(
       `UPDATE articles SET votes=votes+$1 WHERE article_id=$2 RETURNING * ;`,
-      [incl_votes, article_id]
+      [inc_votes, article_id]
     )
     .then((updatedArticleInfo) => {
       if (updatedArticleInfo.rowCount === 0) {
