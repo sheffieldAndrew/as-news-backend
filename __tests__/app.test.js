@@ -154,7 +154,7 @@ describe("05 - PATCH /api/articles/:article_id", () => {
   });
 })
 
-describe("6/7- GET /api/users", () => {
+describe("6 - GET /api/users", () => {
   test("200, responds with an array of users objects with useranme, name and avatar_url props", () => {
     return request(app)
       .get("/api/users")
@@ -300,3 +300,33 @@ test("400 - handles bad path - no such key", () => {
       );
     })
   })
+
+  describe('8 GET api/articles - with comment count , order by created_at DESC', () => {
+    test('200, responds with an array of article objects with correct props - articles, author, title, article_id, topic, created_at, votes, comment_count - ordered by created_at DESC', () => {
+      return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(articles).toBeInstanceOf(Array);
+        expect(articles.length).toBe(5);
+            articles.forEach((article) => {
+              expect(article).toEqual(
+                expect.objectContaining({
+                  author: expect.any(String),
+                  title: expect.any(String),
+                  article_id: expect.any(Number),
+                  body: expect.any(String),
+                  topic: expect.any(String),
+                  created_at: expect.any(String),
+                  votes: expect.any(Number),
+                  comment_count:expect.any(String)
+                })
+              );
+         });
+    });
+  
+  });
+})
+
+
