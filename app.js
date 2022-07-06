@@ -5,6 +5,7 @@ const {
   updateArticleById,
 } = require("./controllers/articles_controllers");
 const { getTopics } = require("./controllers/topics_controllers");
+const { getUsers } = require("./controllers/users.controllers");
 const {
   handlesInvalidPaths404,
   handlesCustomError,
@@ -20,7 +21,10 @@ app.get("/api/topics", getTopics);
 
 app.get("/api/articles/:article_id", getArticleById);
 
+
 app.patch("/api/articles/:article_id", updateArticleById);
+
+app.get("/api/users", getUsers);
 
 // err paths
 app.use("*", handlesInvalidPaths404);

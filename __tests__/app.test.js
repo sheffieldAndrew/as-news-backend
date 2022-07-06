@@ -129,6 +129,7 @@ describe("04 GET /api/articles/:article_id", () => {
   });
 });
 
+
 describe("05 - PATCH /api/articles/:article_id", () => {
   test("200 - updates article and returns updated article", () => {
     const articleUpdate = { incl_votes: 10 };
@@ -145,9 +146,54 @@ describe("05 - PATCH /api/articles/:article_id", () => {
           body: "I find this existence challenging",
           created_at: "2020-07-09T20:11:00.000Z",
           votes: 110,
+
+describe("6- GET /api/users", () => {
+  test("200, responds with an array of users objects with useranme, name and avatar_url props", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then(({ body }) => {
+        const { users } = body;
+        expect(users).toBeInstanceOf(Array);
+        expect(users).toEqual([
+          {
+            username: "butter_bridge",
+            name: "jonny",
+            avatar_url:
+              "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg",
+          },
+          {
+            username: "icellusedkars",
+            name: "sam",
+            avatar_url:
+              "https://avatars2.githubusercontent.com/u/24604688?s=460&v=4",
+          },
+          {
+            username: "rogersop",
+            name: "paul",
+            avatar_url:
+              "https://avatars2.githubusercontent.com/u/24394918?s=400&v=4",
+          },
+          {
+            username: "lurker",
+            name: "do_nothing",
+            avatar_url:
+              "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+          },
+        ]);
+        expect(users.length).toBe(4);
+        users.forEach((user) => {
+          expect(user).toEqual(
+            expect.objectContaining({
+              username: expect.any(String),
+              name: expect.any(String),
+              avatar_url: expect.any(String),
+            })
+          );
         });
       });
   });
+
 
   test("200 - different article updates article and returns updated article", () => {
     const articleUpdate = { incl_votes: 50 };
@@ -228,6 +274,13 @@ describe("05 - PATCH /api/articles/:article_id", () => {
         expect(msg).toBe(
           "Invalid - input must be in form {incl_votes: number}"
         );
+
+  test("404 - handles bad path", () => {
+    return request(app)
+      .get("/api/invalid_path")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("bad path");
       });
   });
 });
