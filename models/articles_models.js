@@ -2,12 +2,15 @@ const connection = require("../db/connection");
 
 exports.fetchArticleById = (article_id) => {
   return connection
-    .query(`SELECT articles.*, COUNT(comments.article_id)::INT AS comment_count 
+    .query(
+      `SELECT articles.*, COUNT(comments.article_id)::INT AS comment_count 
     FROM articles 
     JOIN comments 
     ON comments.article_id = articles.article_id
     WHERE articles.article_id = $1
-    GROUP BY articles.article_id`, [article_id])
+    GROUP BY articles.article_id`,
+      [article_id]
+    )
     .then((result) => {
       if (result.rowCount === 0) {
         return Promise.reject({
@@ -43,17 +46,18 @@ exports.patchArticleById = (inc_votes, article_id) => {
     });
 };
 
-
 exports.fetchArticles = () => {
   return connection
-    .query(`SELECT articles.*, COUNT(comments.article_id)::INT AS comment_count 
+    .query(
+      `SELECT articles.*, COUNT(comments.article_id)::INT AS comment_count 
     FROM articles 
     LEFT JOIN comments 
     ON comments.article_id = articles.article_id
     GROUP BY articles.article_id
-    ORDER BY created_at DESC`)
+    ORDER BY created_at DESC`
+    )
     .then((articles) => {
-          return articles.rows;
+      return articles.rows;
     })
     .catch((err) => {
       return err;

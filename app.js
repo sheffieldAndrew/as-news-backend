@@ -3,7 +3,7 @@ const app = express();
 const {
   getArticleById,
   updateArticleById,
-  getArticles
+  getArticles, 
 } = require("./controllers/articles_controllers");
 const { getTopics } = require("./controllers/topics_controllers");
 const { getUsers } = require("./controllers/users.controllers");
@@ -14,7 +14,7 @@ const {
   handles500s,
 } = require("./controllers/err.controllers");
 
-const {getCommentsByArticleId} = require("./controllers/comments.controllers")
+const {getCommentsByArticleId, postCommentByArticleId} = require("./controllers/comments.controllers")
 
 app.use(express.json());
 
@@ -26,11 +26,13 @@ app.get("/api/articles/:article_id", getArticleById);
 
 app.get("/api/articles", getArticles)
 
-app.patch("/api/articles/:article_id", updateArticleById);
-
 app.get("/api/users", getUsers);
 
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
+
+app.patch("/api/articles/:article_id", updateArticleById);
+
+app.post("/api/articles/:article_id/comments", postCommentByArticleId);
 
 // err paths
 app.use("*", handlesInvalidPaths404);
