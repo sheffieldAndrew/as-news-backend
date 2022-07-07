@@ -14,7 +14,7 @@ exports.getCommentsByArticleId = (req, res, next) => {
 exports.postCommentByArticleId = (req, res, next) => {
     insertCommentByArticleId(req.body, req.params)
     .then((comment) => {
-      res.status(200).send(comment);
+      res.status(201).send(comment);
     }) 
     .catch((err) => {
       next(err);

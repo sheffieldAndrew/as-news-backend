@@ -380,7 +380,7 @@ describe("10 POST /api/articles/:article_id/comments", () => {
     return request(app)
       .post("/api/articles/1/comments")
       .send(newComment)
-      .expect(200)
+      .expect(201)
       .then((comment) => {
         expect(comment.body).toEqual({
           body: "this is a test comment",
@@ -401,7 +401,7 @@ describe("10 POST /api/articles/:article_id/comments", () => {
     return request(app)
       .post("/api/articles/1/comments")
       .send(newComment)
-      .expect(200)
+      .expect(201)
       .then((comment) => {
         expect(comment.body).toEqual;
         expect.objectContaining({

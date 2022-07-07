@@ -37,7 +37,7 @@ exports.insertCommentByArticleId = async (body, params) => {
   const newUsername = body.userName;
   const { article_id } = params;
 
-  if (!body.body || !body.userName) {
+  if (!newBody || !newUsername) {
     return Promise.reject({
       status: 400,
       msg: `Invalid - input must be in form {body: String, userName: String`,
