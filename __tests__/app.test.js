@@ -533,7 +533,6 @@ test('200 - Returns articles sorted by sort_by column - votes, ASC', () => {
   .expect(200)
   .then(({ body }) => {
     const { articles } = body;
-    console.log(articles)
     expect(articles).toBeInstanceOf(Array);
     expect(articles.length).toBe(12);
     articles.forEach((article) => {
