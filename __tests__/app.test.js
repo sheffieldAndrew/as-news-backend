@@ -369,3 +369,108 @@ describe("9. GET /api/articles/:article_id/comments ", () => {
       });
   });
 });
+
+describe("10 POST /api/articles/:article_id/comments", () => {
+  test("201 - Posts comment with correct info and new comment", () => {
+    const newComment = {
+      body: "this is a test comment",
+      userName: "icellusedkars",
+    };
+
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(newComment)
+      .expect(201)
+      .then((comment) => {
+        expect(comment.body).toEqual({
+          body: "this is a test comment",
+          votes: 0,
+          author: "icellusedkars",
+          article_id: 1,
+          comment_id: 19,
+          created_at: expect.any(String),
+        });
+      });
+  });
+  test("201 - Posts comment with correct properties", () => {
+    const newComment = {
+      body: "this is a test comment",
+      userName: "icellusedkars",
+    };
+
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(newComment)
+      .expect(201)
+      .then((comment) => {
+        expect(comment.body).toEqual;
+        expect.objectContaining({
+          body: expect.any(String),
+          votes: expect.any(Number),
+          author: expect.any(String),
+          article_id: expect.any(Number),
+          created_at: expect.any(String),
+        });
+      });
+  });
+
+  test("404 - handles bad path - no such article id", () => {
+    const newComment = {
+      body: "this is a test comment",
+      userName: "icellusedkars",
+    };
+    return request(app)
+      .post("/api/articles/99999/comments")
+      .send(newComment)
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("article 99999 - does not exist");
+      });
+  });
+
+  test("400 - handles bad path - string for article_id", () => {
+    const newComment = {
+      body: "this is a test comment",
+      userName: "icellusedkars",
+    };
+    return request(app)
+      .post("/api/articles/invalid_path/comments")
+      .send(newComment)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Invalid - article must be a number");
+      });
+  });
+
+  test("400 - no such key - wrong key - body ", () => {
+    const newComment = {
+      wrongbody: "this is a test comment",
+      userName: "icellusedkars",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(newComment)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe(
+          "Invalid - input must be in form {body: String, userName: String"
+        );
+      });
+  });
+
+  test("400 - no such key - wrong key - userName ", () => {
+    const newComment = {
+      body: "this is a test comment",
+      wronguserName: "icellusedkars",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(newComment)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe(
+          "Invalid - input must be in form {body: String, userName: String"
+        );
+      });
+  });
+});
