@@ -348,17 +348,6 @@ describe("9. GET /api/articles/:article_id/comments ", () => {
         const { comments } = body;
         expect(comments).toBeInstanceOf(Array);
         expect(comments.length).toBe(0);
-        comments.forEach((comment) => {
-          expect(comment).toEqual(
-            expect.objectContaining({
-              body: expect.any(String),
-              votes: expect.any(Number),
-              author: expect.any(String),
-              article_id: expect.any(Number),
-              created_at: expect.any(String),
-            })
-          );
-        });
       });
   });
 

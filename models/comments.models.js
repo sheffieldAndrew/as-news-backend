@@ -8,7 +8,7 @@ exports.fetchCommentsByArticleId = async (article_id) => {
     });
   }
 
-  const articleValidate = await connection.query(
+const articleValidate = await connection.query(
     `
 SELECT * FROM articles
 WHERE article_id = $1
