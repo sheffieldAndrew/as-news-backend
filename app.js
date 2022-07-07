@@ -14,6 +14,8 @@ const {
   handles500s,
 } = require("./controllers/err.controllers");
 
+const {getCommentsByArticleId} = require("./controllers/comments.controllers")
+
 app.use(express.json());
 
 //happy paths
@@ -27,6 +29,8 @@ app.get("/api/articles", getArticles)
 app.patch("/api/articles/:article_id", updateArticleById);
 
 app.get("/api/users", getUsers);
+
+app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
 
 // err paths
 app.use("*", handlesInvalidPaths404);

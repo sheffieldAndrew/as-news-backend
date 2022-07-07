@@ -66,7 +66,7 @@ describe("04 GET /api/articles/:article_id", () => {
             topic: expect.any(String),
             created_at: expect.any(String),
             votes: expect.any(Number),
-            comment_count:expect.any(String)
+            comment_count: expect.any(Number),
           })
         );
       });
@@ -86,7 +86,7 @@ describe("04 GET /api/articles/:article_id", () => {
             topic: expect.any(String),
             created_at: expect.any(String),
             votes: expect.any(Number),
-            comment_count:expect.any(String)
+            comment_count: expect.any(Number),
           })
         );
       });
@@ -107,7 +107,7 @@ describe("04 GET /api/articles/:article_id", () => {
             body: "Well? Think about it.",
             created_at: "2020-06-06T09:10:00.000Z",
             votes: 0,
-            comment_count: "2"
+            comment_count: 2,
           })
         );
       });
@@ -132,10 +132,9 @@ describe("04 GET /api/articles/:article_id", () => {
   });
 });
 
-
 describe("05 - PATCH /api/articles/:article_id", () => {
   test("200 - updates article and returns updated article", () => {
-    const articleUpdate = { incl_votes: 10 };
+    const articleUpdate = { inc_votes: 10 };
     return request(app)
       .patch("/api/articles/1")
       .send(articleUpdate)
@@ -152,7 +151,7 @@ describe("05 - PATCH /api/articles/:article_id", () => {
         });
       });
   });
-})
+});
 
 describe("6 - GET /api/users", () => {
   test("200, responds with an array of users objects with useranme, name and avatar_url props", () => {
@@ -202,9 +201,8 @@ describe("6 - GET /api/users", () => {
       });
   });
 
-
   test("200 - different article updates article and returns updated article", () => {
-    const articleUpdate = { incl_votes: 50 };
+    const articleUpdate = { inc_votes: 50 };
     return request(app)
       .patch("/api/articles/10")
       .send(articleUpdate)
@@ -223,7 +221,7 @@ describe("6 - GET /api/users", () => {
   });
 
   test("200 - decrease votes - updates article and returns updated article", () => {
-    const articleUpdate = { incl_votes: -50 };
+    const articleUpdate = { inc_votes: -50 };
     return request(app)
       .patch("/api/articles/10")
       .send(articleUpdate)
@@ -244,7 +242,7 @@ describe("6 - GET /api/users", () => {
   test("404 - handles bad path - no such article id", () => {
     return request(app)
       .patch("/api/articles/99999")
-      .send({ incl_votes: 50 })
+      .send({ inc_votes: 50 })
       .expect(404)
       .then(({ body: { msg } }) => {
         expect(msg).toBe("article 99999 - does not exist");
@@ -254,7 +252,7 @@ describe("6 - GET /api/users", () => {
   test("400 - handles bad path - string for article_id", () => {
     return request(app)
       .patch("/api/articles/invalid_path")
-      .send({ incl_votes: 50 })
+      .send({ inc_votes: 50 })
       .expect(400)
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Invalid - article must be a number");
@@ -264,18 +262,12 @@ describe("6 - GET /api/users", () => {
   test("400 - handles bad path - votes passed as string", () => {
     return request(app)
       .patch("/api/articles/2")
-      .send({ incl_votes: "hello" })
+      .send({ inc_votes: "hello" })
       .expect(400)
       .then(({ body: { msg } }) => {
-        expect(msg).toBe(
-          "Invalid - input must be in form {incl_votes: number}"
-        );
+        expect(msg).toBe("Invalid - input must be in form {inc_votes: number}");
       });
-
-      
   });
-
-
 
   test("404 - handles bad path", () => {
     return request(app)
@@ -285,48 +277,106 @@ describe("6 - GET /api/users", () => {
         expect(msg).toBe("bad path");
       });
   });
-
-
 });
 
 test("400 - handles bad path - no such key", () => {
   return request(app)
     .patch("/api/articles/2")
-    .send({ inc_notes: 2 })
+    .send({ incl_votes: 2 })
     .expect(400)
     .then(({ body: { msg } }) => {
-      expect(msg).toBe(
-        "Invalid - input must be in form {incl_votes: number}"
-      );
-    })
-  })
+      expect(msg).toBe("Invalid - input must be in form {inc_votes: number}");
+    });
+});
 
-  describe('8 GET api/articles - with comment count , order by created_at DESC', () => {
-    test('200, responds with an array of article objects with correct props - articles, author, title, article_id, topic, created_at, votes, comment_count - ordered by created_at DESC', () => {
-      return request(app)
+describe("8 GET api/articles - with comment count , order by created_at DESC", () => {
+  test("200, responds with an array of article objects with correct props - articles, author, title, article_id, topic, created_at, votes, comment_count - ordered by created_at DESC", () => {
+    return request(app)
       .get("/api/articles")
       .expect(200)
       .then(({ body }) => {
         const { articles } = body;
         expect(articles).toBeInstanceOf(Array);
-        expect(articles.length).toBe(5);
-            articles.forEach((article) => {
-              expect(article).toEqual(
-                expect.objectContaining({
-                  author: expect.any(String),
-                  title: expect.any(String),
-                  article_id: expect.any(Number),
-                  body: expect.any(String),
-                  topic: expect.any(String),
-                  created_at: expect.any(String),
-                  votes: expect.any(Number),
-                  comment_count:expect.any(String)
-                })
-              );
-         });
-    });
-  
+        expect(articles.length).toBe(12);
+        articles.forEach((article) => {
+          expect(article).toEqual(
+            expect.objectContaining({
+              author: expect.any(String),
+              title: expect.any(String),
+              article_id: expect.any(Number),
+              body: expect.any(String),
+              topic: expect.any(String),
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+              comment_count: expect.any(Number),
+            })
+          );
+        });
+        expect(articles).toBeSortedBy("created_at", { descending: true });
+      });
   });
-})
+});
 
+describe("9. GET /api/articles/:article_id/comments ", () => {
+  test("200 - different article updates article and returns updated article", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({ body }) => {
+        const { comments } = body;
+        expect(comments).toBeInstanceOf(Array);
+        expect(comments.length).toBe(11);
+        comments.forEach((comment) => {
+          expect(comment).toEqual(
+            expect.objectContaining({
+              body: expect.any(String),
+              votes: expect.any(Number),
+              author: expect.any(String),
+              article_id: expect.any(Number),
+              created_at: expect.any(String),
+            })
+          );
+        });
+      });
+  });
 
+  test("200 - Returns 200 and empty array if article exists with no comments", () => {
+    return request(app)
+      .get("/api/articles/2/comments")
+      .expect(200)
+      .then(({ body }) => {
+        const { comments } = body;
+        expect(comments).toBeInstanceOf(Array);
+        expect(comments.length).toBe(0);
+        comments.forEach((comment) => {
+          expect(comment).toEqual(
+            expect.objectContaining({
+              body: expect.any(String),
+              votes: expect.any(Number),
+              author: expect.any(String),
+              article_id: expect.any(Number),
+              created_at: expect.any(String),
+            })
+          );
+        });
+      });
+  });
+
+  test("404 - handles bad path - no article", () => {
+    return request(app)
+      .get("/api/articles/99999/comments")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("article 99999 - does not exist");
+      });
+  });
+
+  test("400 - handles bad path - string for article_id", () => {
+    return request(app)
+      .get("/api/articles/invalid_path/comments")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("article id must be a number");
+      });
+  });
+});
