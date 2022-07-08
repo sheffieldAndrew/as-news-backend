@@ -80,3 +80,20 @@ WHERE article_id = $1
       return newComment.rows[0];
     });
 };
+
+exports.removeCommentById = (comment_id) => {
+  console.log(comment_id);
+
+  if (isNaN(+comment_id)) {
+    return Promise.reject({
+      status: 400,
+      msg: `Invalid - comment_id must be a number`,
+    });
+  }
+
+  return connection
+    .query(`DELETE FROM comments WHERE comment_id=$1`, [comment_id])
+    .then((comment) => {
+      return comment;
+    });
+};

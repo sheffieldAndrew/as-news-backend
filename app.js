@@ -14,7 +14,7 @@ const {
   handles500s,
 } = require("./controllers/err.controllers");
 
-const {getCommentsByArticleId, postCommentByArticleId} = require("./controllers/comments.controllers")
+const {getCommentsByArticleId, postCommentByArticleId, deleteCommentById} = require("./controllers/comments.controllers")
 
 app.use(express.json());
 
@@ -33,6 +33,8 @@ app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
 app.patch("/api/articles/:article_id", updateArticleById);
 
 app.post("/api/articles/:article_id/comments", postCommentByArticleId);
+
+app.delete('/api/comments/:comment_id', deleteCommentById);
 
 // err paths
 app.use("*", handlesInvalidPaths404);
