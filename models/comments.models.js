@@ -82,8 +82,6 @@ WHERE article_id = $1
 };
 
 exports.removeCommentById = (comment_id) => {
-  console.log(comment_id);
-
   if (isNaN(+comment_id)) {
     return Promise.reject({
       status: 400,
