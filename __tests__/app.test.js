@@ -474,3 +474,171 @@ describe("10 POST /api/articles/:article_id/comments", () => {
       });
   });
 });
+
+describe('11 - GET api/articles - with queries', () => {
+  test('200 - Returns articles sorted by sort_by column', () => {
+    return request(app)
+    .get("/api/articles?sort_by=created_at")
+    .expect(200)
+    .then(({ body: {articles} }) => {
+     expect(articles).toBeInstanceOf(Array);
+      expect(articles.length).toBe(12);
+      articles.forEach((article) => {
+        expect(article).toEqual(
+          expect.objectContaining({
+            author: expect.any(String),
+            title: expect.any(String),
+            article_id: expect.any(Number),
+            body: expect.any(String),
+            topic: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            comment_count: expect.any(Number),
+          })
+        );
+      });
+      expect(articles).toBeSortedBy("created_at", { descending: true });
+    });
+});
+
+test('200 - Returns articles default - created_at , order query', () => {
+  return request(app)
+  .get("/api/articles?order=asc")
+  .expect(200)
+  .then(({ body: {articles} }) => {
+   expect(articles).toBeInstanceOf(Array);
+    expect(articles.length).toBe(12);
+    articles.forEach((article) => {
+      expect(article).toEqual(
+        expect.objectContaining({
+          author: expect.any(String),
+          title: expect.any(String),
+          article_id: expect.any(Number),
+          body: expect.any(String),
+          topic: expect.any(String),
+          created_at: expect.any(String),
+          votes: expect.any(Number),
+          comment_count: expect.any(Number),
+        })
+      );
+    });
+    expect(articles).toBeSortedBy("created_at", { ascending: true });
+  });
+});
+
+test('200 - Topic exists but no articles -returns empty array', () => {
+  return request(app)
+  .get("/api/articles?topic=paper")
+  .expect(200)
+  .then(({ body: {articles} }) => {
+   expect(articles).toBeInstanceOf(Array);
+    expect(articles.length).toBe(0);
+  });
+});
+    
+test('200 - Returns articles sorted by sort_by column - title', () => {
+  return request(app)
+  .get("/api/articles?sort_by=title")
+  .expect(200)
+  .then(({ body }) => {
+    const { articles } = body;
+    expect(articles).toBeInstanceOf(Array);
+    expect(articles.length).toBe(12);
+    articles.forEach((article) => {
+      expect(article).toEqual(
+        expect.objectContaining({
+          author: expect.any(String),
+          title: expect.any(String),
+          article_id: expect.any(Number),
+          body: expect.any(String),
+          topic: expect.any(String),
+          created_at: expect.any(String),
+          votes: expect.any(Number),
+          comment_count: expect.any(Number),
+        })
+      );
+    });
+    expect(articles).toBeSortedBy("title", { descending: true });
+  });
+});
+
+test('200 - Returns articles sorted by sort_by column - votes, ASC', () => {
+  return request(app)
+  .get("/api/articles?sort_by=votes&order=asc")
+  .expect(200)
+  .then(({ body }) => {
+    const { articles } = body;
+    expect(articles).toBeInstanceOf(Array);
+    expect(articles.length).toBe(12);
+    articles.forEach((article) => {
+      expect(article).toEqual(
+        expect.objectContaining({
+          author: expect.any(String),
+          title: expect.any(String),
+          article_id: expect.any(Number),
+          body: expect.any(String),
+          topic: expect.any(String),
+          created_at: expect.any(String),
+          votes: expect.any(Number),
+          comment_count: expect.any(Number),
+        })
+      );
+    });
+    expect(articles).toBeSortedBy("votes", { ascending: true });
+  });
+});
+
+test('200 - Returns articles sorted by sort_by column - author, ASC, filtered by topic - "mitch"', () => {
+  return request(app)
+  .get("/api/articles?sort_by=author&order=asc&topic=mitch")
+  .expect(200)
+  .then(({ body }) => {
+    const { articles } = body;
+      expect(articles).toBeInstanceOf(Array);
+    expect(articles.length).toBe(11);
+    articles.forEach((article) => {
+      expect(article).toEqual(
+        expect.objectContaining({
+          author: expect.any(String),
+          title: expect.any(String),
+          article_id: expect.any(Number),
+          body: expect.any(String),
+          topic: expect.any(String),
+          created_at: expect.any(String),
+          votes: expect.any(Number),
+          comment_count: expect.any(Number),
+        })
+      );
+    });
+    expect(articles).toBeSortedBy("author", { ascending: true });
+  });
+});
+
+test("400 - handles bad path - invalid sort_by", () => {
+  return request(app)
+    .get("/api/articles?sort_by=invalid")
+    .expect(400)
+    .then(({ body: { msg } }) => {
+      expect(msg).toBe("cannot sort by invalid");
+    });
+});
+
+test("400 - handles bad path - invalid order", () => {
+  return request(app)
+    .get("/api/articles?order=invalid")
+    .expect(400)
+    .then(({ body: { msg } }) => {
+      expect(msg).toBe("cannot sort by invalid");
+    });
+});
+
+
+test("400 - handles bad path - invalid topic", () => {
+  return request(app)
+    .get("/api/articles?topic=invalid")
+    .expect(400)
+    .then(({ body: { msg } }) => {
+      expect(msg).toBe("cannot sort by invalid");
+    });
+});
+});
