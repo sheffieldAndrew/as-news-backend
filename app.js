@@ -18,8 +18,6 @@ const {getCommentsByArticleId, postCommentByArticleId, deleteCommentById} = requ
 
 app.use(express.json());
 
-//happy paths
-
 app.get("/api/topics", getTopics);
 
 app.get("/api/articles/:article_id", getArticleById);
@@ -36,7 +34,6 @@ app.post("/api/articles/:article_id/comments", postCommentByArticleId);
 
 app.delete('/api/comments/:comment_id', deleteCommentById);
 
-// err paths
 app.use("*", handlesInvalidPaths404);
 
 app.use(handlesCustomError);
