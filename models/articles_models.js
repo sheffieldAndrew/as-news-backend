@@ -88,22 +88,30 @@ exports.fetchArticles = async (
         msg: `cannot sort by ${topic}`,
       });
     } else {
-      return connection
-        .query(
-          `SELECT articles.*, COUNT(comments.article_id)::INT AS comment_count FROM articles LEFT JOIN comments ON comments.article_id = articles.article_id WHERE topic = $1 GROUP BY articles.article_id ORDER BY ${sort_by} ${order}`,
-          [topic]
-        )
-        .then((result) => {
-          return result.rows;
-        });
+      return connection.query(
+        `SELECT articles.*, COUNT(comments.article_id)::INT 
+        AS comment_count 
+        FROM articles 
+        LEFT JOIN comments ON comments.article_id = articles.article_id 
+        WHERE topic = $1 
+        GROUP BY articles.article_id 
+        ORDER BY ${sort_by} ${order}`,
+        [topic]
+      ).then((result)=> {
+        return result.rows
+      })
     }
   } else {
-    return connection
-      .query(
-        `SELECT articles.*, COUNT(comments.article_id)::INT AS comment_count FROM articles LEFT JOIN comments ON comments.article_id = articles.article_id GROUP BY articles.article_id ORDER BY ${sort_by} ${order}`
-      )
-      .then((result) => {
-        return result.rows;
-      });
-  }
-};
+    return connection.query(
+      `SELECT articles.*, COUNT(comments.article_id)::INT 
+      AS comment_count 
+      FROM articles LEFT JOIN comments ON comments.article_id = articles.article_id 
+      GROUP BY articles.article_id 
+      ORDER BY ${sort_by} ${order}`
+    ).then((result)=> {
+      return result.rows
+  })
+  }}
+
+
+  
