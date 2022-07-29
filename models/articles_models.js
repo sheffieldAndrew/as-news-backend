@@ -58,6 +58,7 @@ exports.fetchArticles = async (
     "body",
     "created_at",
     "votes",
+    "comment_count",
   ];
 
   const validOrder = ["ASC", "DESC", "asc", "desc"];
