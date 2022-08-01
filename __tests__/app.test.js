@@ -154,7 +154,7 @@ describe("05 - PATCH /api/articles/:article_id", () => {
 });
 
 describe("6 - GET /api/users", () => {
-  test("200, responds with an array of users objects with useranme, name and avatar_url props", () => {
+  test("200, responds with an array of user objects with useranme, name and avatar_url props", () => {
     return request(app)
       .get("/api/users")
       .expect(200)
@@ -318,7 +318,7 @@ describe("8 GET api/articles - with comment count , order by created_at DESC", (
 });
 
 describe("9. GET /api/articles/:article_id/comments ", () => {
-  test("200 - different article updates article and returns updated article", () => {
+  test("200 - returns an array of comments for specific article", () => {
     return request(app)
       .get("/api/articles/1/comments")
       .expect(200)

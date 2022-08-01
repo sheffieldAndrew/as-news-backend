@@ -1,5 +1,6 @@
 const connection = require("../db/connection");
 
+
 exports.fetchArticleById = (article_id) => {
   return connection
     .query(
@@ -59,7 +60,7 @@ exports.fetchArticles = async (
     "created_at",
     "votes",
     "comment_count",
-  ];
+  ];  
 
   const validOrder = ["ASC", "DESC", "asc", "desc"];
 
