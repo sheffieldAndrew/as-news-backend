@@ -655,3 +655,15 @@ describe("12 - DELETE api/comments/:comment_id", () => {
       });
   });
 });
+
+
+describe('13 - GET /api', () => {
+  test('returns JSON describing all endpoints', () => {
+    return request(app)
+    .get("/api")
+    .expect(200)
+    .then(({ body }) => {
+      const { endpoints } = body;
+      expect(typeof endpoints).toBe("string");
+      });
+  });});

@@ -23,11 +23,14 @@
   },
   "homepage": "https://github.com/northcoders/be-nc-news#readme",
   "devDependencies": {
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
     "husky": "^7.0.0",
     "jest": "^27.5.1",
     "jest-extended": "^2.0.0",
     "jest-sorted": "^1.0.14",
     "pg-format": "^1.0.4",
+    "prettier": "^2.7.1",
     "supertest": "^6.2.4"
   },
   "dependencies": {
