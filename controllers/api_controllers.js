@@ -1,10 +1,5 @@
-const {fetchEndpoints} = require('../models/api_models');
+const jsonData = require("../endpoints.json");
 
 exports.getEndpoints = (req, res, next) => {
-  fetchEndpoints()
-    .then((data) => {
-        res.status(200).send({ endpoints: JSON.parse(data) });
-    })
-    .catch(next);
+  res.json(jsonData);
 };
-
